@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Form Print Task</title>
+
+<style>
+  body {
+    font-family: Arial;
+    padding: 20px;
+  }
+  input {
+    padding: 5px;
+    margin-right: 10px;
+  }
+  .colored-output span {
+    padding: 5px 10px;
+    margin-right: 5px;
+    color: black;
+    font-weight: bold;
+  }
+  #nameColor { background: lightgreen; }
+  #emailColor { background: red; color: white; }
+  #mobileColor { background: yellow; }
+
+  table {
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  td, th {
+    border: 1px solid black;
+    padding: 8px 12px;
+  }
+</style>
+
+</head>
+<body>
+
+<h2>Print User Information</h2>
+
+<!-- Form -->
+<label>Name:</label>
+<input type="text" id="name">
+<label>Email:</label>
+<input type="text" id="email">
+<label>Mobile:</label>
+<input type="text" id="mobile">
+
+<button onclick="printData()">Click On Me to Print</button>
+
+<!-- First Output (colored) -->
+<div class="colored-output" id="coloredData" style="margin-top: 20px;"></div>
+
+<!-- Table Output -->
+<table id="infoTable" style="margin-top: 20px; width: 350px;">
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Mobile</th>
+  </tr>
+</table>
+
+<script>
+function printData() {
+    let name = document.getElementById("name").value;
+    let email = document.getElementById("email").value;
+    let mobile = document.getElementById("mobile").value;
+
+    // first colored printing
+    document.getElementById("coloredData").innerHTML = `
+        <span id="nameColor">${name}</span>
+        <span id="emailColor">${email}</span>
+        <span id="mobileColor">${mobile}</span>
+    `;
+
+    // second printing to the table
+    let table = document.getElementById("infoTable");
+
+    let row = document.createElement("tr");
+
+    row.innerHTML = `
+        <td>${name}</td>
+        <td>${email}</td>
+        <td>${mobile}</td>
+    `;
+
+    table.appendChild(row);
+}
+</script>
+
+</body>
+</html>

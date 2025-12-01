@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Event Tasks Solution</title>
+
+<style>
+  body { font-family: Arial; padding: 20px; }
+
+  /* Task 1 */
+  .hoverBox {
+    padding: 10px;
+    border: 1px solid black;
+    width: 200px;
+    text-align: center;
+    transition: 0.3s;
+  }
+
+  /* Task 2 */
+  #flagImg {
+    width: 150px;
+    height: 100px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    object-fit: cover;
+  }
+
+  /* Task 3 */
+  #msg { font-size: 14px; margin-top: 5px; }
+
+  /* Task 4 */
+  #contentBox {
+    padding: 10px;
+    border: 1px solid #000;
+    margin-top: 5px;
+    display: none;
+  }
+
+  /* Task 5 */
+  #editBox {
+    width: 300px;
+    height: 100px;
+    padding: 8px;
+    border: 1px solid black;
+  }
+
+  /* Task 6 */
+  #animateBox {
+    width: 150px;
+    height: 150px;
+    background: red;
+    margin-top: 10px;
+    transition: background 1s linear;
+  }
+</style>
+</head>
+<body>
+
+<h2>Task 1: Hover Effect</h2>
+<div class="hoverBox" id="hoverBox">Hover over me</div>
+
+
+<h2>Task 2: Country + Flag</h2>
+<select id="countrySelect">
+  <option value="">Select Country</option>
+  <option value="jordan">Jordan</option>
+  <option value="usa">USA</option>
+  <option value="japan">Japan</option>
+  <option value="france">France</option>
+</select>
+<br>
+<img id="flagImg" />
+
+<h2>Task 3: Password Validation</h2>
+<input type="password" id="pass" placeholder="Enter password">
+<input type="password" id="confirm" placeholder="Confirm password">
+<div id="msg"></div>
+
+<h2>Task 4: Show / Hide</h2>
+<button id="toggleBtn">Show/Hide</button>
+<div id="contentBox">This is the content...</div>
+
+<h2>Task 5: Text Editing</h2>
+<textarea id="editBox"></textarea>
+<br><br>
+<select id="fontType">
+  <option value="Arial">Arial</option>
+  <option value="Times New Roman">Times New Roman</option>
+  <option value="Courier New">Courier New</option>
+</select>
+
+<button onclick="makeBold()">Bold</button>
+<button onclick="makeUnderline()">Underline</button>
+
+<select id="fontSize">
+  <option value="14px">14px</option>
+  <option value="20px">20px</option>
+  <option value="30px">30px</option>
+</select>
+
+<h2>Task 6: Color Animation</h2>
+<input type="number" id="timeInput" placeholder="Time in seconds">
+<button id="startAnim">Start Animation</button>
+<div id="animateBox"></div>
+
+<script>
+/* ==========================
+   Task 1 Hover Effect
+========================== */
+const hoverBox = document.getElementById("hoverBox");
+
+hoverBox.onmouseover = function () {
+  hoverBox.style.background = "yellow";
+  hoverBox.style.fontWeight = "bold";
+};
+hoverBox.onmouseout = function () {
+  hoverBox.style.background = "white";
+  hoverBox.style.fontWeight = "normal";
+};
+
+/* ==========================
+   Task 2 Country + Flag
+========================== */
+document.getElementById("countrySelect").addEventListener("change", function () {
+  const flag = document.getElementById("flagImg");
+  switch (this.value) {
+    case "jordan":
+      flag.src = "https://upload.wikimedia.org/wikipedia/commons/c/c0/Flag_of_Jordan.svg";
+      break;
+    case "usa":
+      flag.src = "https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg";
+      break;
+    case "japan":
+      flag.src = "https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg";
+      break;
+    case "france":
+      flag.src = "https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg";
+      break;
+    default:
+      flag.src = "";
+  }
+});
+
+/* ==========================
+   Task 3 Password Validation
+========================== */
+document.getElementById("confirm").addEventListener("keyup", checkPassword);
+document.getElementById("pass").addEventListener("keyup", checkPassword);
+
+function checkPassword() {
+  const p = document.getElementById("pass").value;
+  const c = document.getElementById("confirm").value;
+  const msg = document.getElementById("msg");
+
+  if (p.length < 6) {
+    msg.style.color = "red";
+    msg.textContent = "Password too short!";
+    return;
+  }
+
+  if (p !== c) {
+    msg.style.color = "red";
+    msg.textContent = "Passwords do not match!";
+  } else {
+    msg.style.color = "green";
+    msg.textContent = "Password OK ✔";
+  }
+}
+
+/* ==========================
+   Task 4 Show / Hide Content
+========================== */
+document.getElementById("toggleBtn").onclick = function () {
+  const box = document.getElementById("contentBox");
+  box.style.display = box.style.display === "none" ? "block" : "none";
+};
+
+/* ==========================
+   Task 5 Text Editing
+========================== */
+const editBox = document.getElementById("editBox");
+
+document.getElementById("fontType").onchange = function () {
+  editBox.style.fontFamily = this.value;
+};
+
+document.getElementById("fontSize").onchange = function () {
+  editBox.style.fontSize = this.value;
+};
+
+function makeBold() {
+  editBox.style.fontWeight =
+    editBox.style.fontWeight === "bold" ? "normal" : "bold";
+}
+
+function makeUnderline() {
+  editBox.style.textDecoration =
+    editBox.style.textDecoration === "underline" ? "none" : "underline";
+}
+
+/* ==========================
+   Task 6 Animation Color Change
+========================== */
+const animateBox = document.getElementById("animateBox");
+
+document.getElementById("startAnim").onclick = function () {
+  let time = Number(document.getElementById("timeInput").value) * 1000;
+
+  setInterval(() => {
+    animateBox.style.background =
+      "#" + Math.floor(Math.random() * 16777215).toString(16);
+  }, time);
+};
+</script>
+
+</body>
+</html>

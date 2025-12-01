@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Task 5 - JSON + Show/Hide Table</title>
+
+<style>
+  body { font-family: Arial; margin: 0; }
+  #toggleBtn {
+    background: #001b60;
+    color: white;
+    text-align: center;
+    padding: 25px;
+    font-size: 28px;
+    cursor: pointer;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    display: none;
+  }
+  th, td {
+    padding: 12px;
+    border: 1px solid black;
+  }
+  th { background: #eee; }
+</style>
+
+</head>
+<body>
+
+<div id="toggleBtn">
+  Click to show Table / Double Click to hide Table
+</div>
+
+<table id="table">
+  <thead>
+    <tr>
+      <th>First Name</th>
+      <th>Mobile</th>
+      <th>Email</th>
+    </tr>
+  </thead>
+  <tbody id="tableBody"></tbody>
+</table>
+
+<script>
+// ==============================
+// FETCH JSON FROM FILE
+// ==============================
+let peopleData = [];
+
+fetch("data.json")
+  .then(response => response.json())
+  .then(data => {
+    peopleData = data;  
+    fillTable();
+  })
+  .catch(err => console.log("Error loading JSON:", err));
+
+// Fill table once JSON arrives
+function fillTable() {
+  const body = document.getElementById("tableBody");
+
+  peopleData.forEach(p => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${p.name}</td>
+      <td>${p.mobile}</td>
+      <td>${p.email}</td>
+    `;
+
+    body.appendChild(row);
+  });
+}
+
+
+// ==============================
+// SHOW / HIDE TABLE EVENTS
+// ==============================
+const btn = document.getElementById("toggleBtn");
+const table = document.getElementById("table");
+
+// show on click
+btn.addEventListener("click", () => {
+  table.style.display = "table";
+});
+
+// hide on double click
+btn.addEventListener("dblclick", () => {
+  table.style.display = "none";
+});
+</script>
+
+</body>
+</html>

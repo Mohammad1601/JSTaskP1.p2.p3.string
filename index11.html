@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Registration Form - Regex Validation</title>
+<style>
+  body { font-family: Arial; padding: 20px; }
+  label { display: block; margin-top: 10px; }
+  input { padding: 8px; width: 250px; margin-top: 5px; }
+  .error { color: red; font-size: 14px; }
+  .success { color: green; font-size: 14px; }
+  button { margin-top: 15px; padding: 10px 15px; }
+</style>
+</head>
+<body>
+
+<h2>Registration Form</h2>
+
+<form id="regForm">
+
+  <!-- First Name -->
+  <label>First Name:</label>
+  <input type="text" id="first">
+  <p id="firstMsg" class="error"></p>
+
+  <!-- Last Name -->
+  <label>Last Name:</label>
+  <input type="text" id="last">
+  <p id="lastMsg" class="error"></p>
+
+  <!-- Birth Date -->
+  <label>Birth Date:</label>
+  <input type="date" id="birth">
+  <p id="birthMsg" class="error"></p>
+
+  <!-- Email -->
+  <label>Email:</label>
+  <input type="email" id="email">
+  
+  <label>Confirm Email:</label>
+  <input type="email" id="confirmEmail">
+  <p id="emailMsg" class="error"></p>
+
+  <!-- Password -->
+  <label>Password:</label>
+  <input type="password" id="pass">
+
+  <label>Confirm Password:</label>
+  <input type="password" id="confirmPass">
+  <p id="passMsg" class="error"></p>
+
+  <!-- Mobile -->
+  <label>Mobile Number:</label>
+  <input type="text" id="mobile">
+  <p id="mobileMsg" class="error"></p>
+
+  <button type="button" id="submit">Register</button>
+  <p id="finalMsg"></p>
+
+</form>
+
+<script>
+// ======================= REGEX PATTERNS ===========================
+
+// 1) الاسم: حروف فقط (A-Z أو a-z)
+const nameRegex = /^[A-Za-z]+$/;
+
+// 3) الإيميل: هيكل بسيط مثل something@domain.com
+const emailRegex = /^[\w.-]+@[\w.-]+\.\w+$/;
+
+// 5-a) الباسوورد يبدأ بحرف كابيتال
+const passStartCap = /^[A-Z]/;
+
+// 5-b) يحتوي على رقمين على الأقل
+const passTwoNumbers = /.*\d.*\d/;
+
+// 5-c) يحتوي على رمز واحد على الأقل
+const passSymbol = /[!@#$%^&*()_+\-{}\[\]:";'<>?,.\/]/;
+
+// 6) الموبايل: 10 أرقام بالضبط
+const mobileRegex = /^\d{10}$/;
+
+// ======================= VALIDATION LOGIC ===========================
+document.getElementById("submit").onclick = function () {
+
+  let ok = true;
+
+  let first = document.getElementById("first").value.trim();
+  let last = document.getElementById("last").value.trim();
+  let birth = document.getElementById("birth").value;
+  let email = document.getElementById("email").value.trim();
+  let confirmEmail = document.getElementById("confirmEmail").value.trim();
+  let pass = document.getElementById("pass").value.trim();
+  let confirmPass = document.getElementById("confirmPass").value.trim();
+  let mobile = document.getElementById("mobile").value.trim();
+
+  // ---------- First Name ----------
+  if (!nameRegex.test(first)) {
+    document.getElementById("firstMsg").textContent = "First name must contain only letters.";
+    ok = false;
+  } else {
+    document.getElementById("firstMsg").textContent = "";
+  }
+
+  // ---------- Last Name ----------
+  if (!nameRegex.test(last)) {
+    document.getElementById("lastMsg").textContent = "Last name must contain only letters.";
+    ok = false;
+  } else {
+    document.getElementById("lastMsg").textContent = "";
+  }
+
+  // ---------- Birth Date ----------
+  if (!birth) {
+    document.getElementById("birthMsg").textContent = "Please select a valid date.";
+    ok = false;
+  } else {
+    document.getElementById("birthMsg").textContent = "";
+  }
+
+  // ---------- Email Structure + Error Handling ----------
+  try {
+    if (!emailRegex.test(email)) {
+      throw "Email format is invalid.";
+    }
+  } catch (err) {
+    document.getElementById("emailMsg").textContent = err;
+    ok = false;
+  }
+
+  // ---------- Email Match ----------
+  if (email !== confirmEmail) {
+    document.getElementById("emailMsg").textContent = "Emails do not match.";
+    ok = false;
+  } else if (emailRegex.test(email)) {
+    // لو الإيميل صح من ناحية Regex ومطابق للتأكيد نمسح الرسالة
+    document.getElementById("emailMsg").textContent = "";
+  }
+
+  // ---------- Password Validation ----------
+  let passMsg = "";
+
+  if (!passStartCap.test(pass)) passMsg += "• Must start with a capital letter. ";
+  if (!passTwoNumbers.test(pass)) passMsg += "• Must contain at least 2 numbers. ";
+  if (!passSymbol.test(pass)) passMsg += "• Must contain at least 1 symbol. ";
+  if (pass.length < 8 || pass.length > 32) passMsg += "• Must be 8–32 chars long. ";
+
+  if (pass !== confirmPass) passMsg += "• Passwords do not match.";
+
+  if (passMsg !== "") {
+    document.getElementById("passMsg").textContent = passMsg;
+    ok = false;
+  } else {
+    document.getElementById("passMsg").textContent = "";
+  }
+
+  // ---------- Mobile ----------
+  if (!mobileRegex.test(mobile)) {
+    document.getElementById("mobileMsg").textContent = "Mobile must be exactly 10 digits.";
+    ok = false;
+  } else {
+    document.getElementById("mobileMsg").textContent = "";
+  }
+
+  // ---------- Final Message ----------
+  const final = document.getElementById("finalMsg");
+  if (ok) {
+    final.style.color = "green";
+    final.textContent = "Registration Completed Successfully ✔";
+  } else {
+    final.style.color = "red";
+    final.textContent = "Please fix the errors above.";
+  }
+};
+</script>
+
+</body>
+</html>
